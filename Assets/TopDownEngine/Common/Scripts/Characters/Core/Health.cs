@@ -14,35 +14,35 @@ namespace MoreMountains.TopDownEngine
 	{
         [Header("Bindings")]
 
-		/// the model to disable (if set so)
+		// the model to disable (if set so)
 		[Tooltip("the model to disable (if set so)")]
 		public GameObject Model;
 
         [Header("Status")]
 
-        /// the current health of the character
         [MMReadOnly]
-		[Tooltip("the current health of the character")]
+		[Tooltip("当前血量")]
 		public int CurrentHealth ;
-		/// If this is true, this object can't take damage
+        
 		[MMReadOnly]
-		[Tooltip("If this is true, this object can't take damage")]
+		[Tooltip("是否无敌，无敌不受到伤害")]
 		public bool Invulnerable = false;	
 
 		[Header("Health")]
 
 		[MMInformation("Add this component to an object and it'll have health, will be able to get damaged and potentially die.",MoreMountains.Tools.MMInformationAttribute.InformationType.Info,false)]
-		/// the initial amount of health of the object
-		[Tooltip("the initial amount of health of the object")]
+		// 初始血量
+		[Tooltip("初始血量")]
 		public int InitialHealth = 10;
-		/// the maximum amount of health of the object
-		[Tooltip("the maximum amount of health of the object")]
+		
+		// 最大血量
+		[Tooltip("最大血量")]
 		public int MaximumHealth = 10;
 
         [Header("Damage")]
 
         [MMInformation("Here you can specify an effect and a sound FX to instantiate when the object gets damaged, and also how long the object should flicker when hit (only works for sprites).", MoreMountains.Tools.MMInformationAttribute.InformationType.Info, false)]
-		/// whether or not this object is immune to damage knockback
+		// whether or not this object is immune to damage knockback
 		[Tooltip("whether or not this object is immune to damage knockback")]
 		public bool ImmuneToKnockback = false;
 		/// the feedback to play when getting damage
@@ -213,10 +213,10 @@ namespace MoreMountains.TopDownEngine
 	    }
 
 		/// <summary>
-		/// Called when the object takes damage
+		/// 造成伤害
 		/// </summary>
-		/// <param name="damage">The amount of health points that will get lost.</param>
-		/// <param name="instigator">The object that caused the damage.</param>
+		/// <param name="damage">伤害值</param>
+		/// <param name="instigator">造成伤害的物体</param>
 		/// <param name="flickerDuration">The time (in seconds) the object should flicker after taking the damage.</param>
 		/// <param name="invincibilityDuration">The duration of the short invincibility following the hit.</param>
 		public virtual void Damage(int damage,GameObject instigator, float flickerDuration, float invincibilityDuration)
@@ -480,7 +480,7 @@ namespace MoreMountains.TopDownEngine
 		}
 
 	    /// <summary>
-	    /// Resets the character's health to its max value
+	    /// 重置血量到最大
 	    /// </summary>
 	    public virtual void ResetHealthToMaxHealth()
 	    {
@@ -489,7 +489,7 @@ namespace MoreMountains.TopDownEngine
         }	
 
         /// <summary>
-        /// Sets the current health to the specified new value, and updates the health bar
+        /// 设置当前血量，并且更新血条
         /// </summary>
         /// <param name="newValue"></param>
         public virtual void SetHealth(int newValue)
@@ -499,7 +499,7 @@ namespace MoreMountains.TopDownEngine
         }
 
 	    /// <summary>
-	    /// Updates the character's health bar progress.
+	    /// 更新血条
 	    /// </summary>
 		protected virtual void UpdateHealthBar(bool show)
 	    {
@@ -523,6 +523,7 @@ namespace MoreMountains.TopDownEngine
 
 	    /// <summary>
 	    /// Prevents the character from taking any damage
+	    /// 开启无敌
 	    /// </summary>
 	    public virtual void DamageDisabled()
 	    {
@@ -531,6 +532,7 @@ namespace MoreMountains.TopDownEngine
 
 	    /// <summary>
 	    /// Allows the character to take damage
+	    /// 取消无敌状态
 	    /// </summary>
 	    public virtual void DamageEnabled()
 	    {
@@ -539,6 +541,7 @@ namespace MoreMountains.TopDownEngine
 
 		/// <summary>
 	    /// makes the character able to take damage again after the specified delay
+	    /// delay取消无敌状态
 	    /// </summary>
 	    /// <returns>The layer collision.</returns>
 	    public virtual IEnumerator DamageEnabled(float delay)
