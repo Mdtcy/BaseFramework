@@ -3,12 +3,12 @@ using System.Collections;
 using MoreMountains.Tools;
 
 namespace MoreMountains.TopDownEngine
-{	
+{
     /// <summary>
-    /// Projectile class to be used along with projectile weapons
+    /// projectile weapons 子弹
     /// </summary>
 	[AddComponentMenu("TopDown Engine/Weapons/Projectile")]
-	public class Projectile : MMPoolableObject  
+	public class Projectile : MMPoolableObject
 	{
 		[Header("Movement")]
 		/// if true, the projectile will rotate at initialization towards its rotation
@@ -41,7 +41,7 @@ namespace MoreMountains.TopDownEngine
 		/// should the projectile damage its owner?
 		[Tooltip("should the projectile damage its owner?")]
 		public bool DamageOwner = false;
-        
+
 		protected Weapon _weapon;
 		protected GameObject _owner;
 		protected Vector3 _movement;
@@ -61,7 +61,7 @@ namespace MoreMountains.TopDownEngine
         protected bool _spawnerIsFacingRight;
 
         /// <summary>
-        /// On awake, we store the initial speed of the object 
+        /// On awake, we store the initial speed of the object
         /// </summary>
         protected virtual void Awake ()
 		{
@@ -105,7 +105,7 @@ namespace MoreMountains.TopDownEngine
 			Speed = _initialSpeed;
 			ProjectileIsFacingRight = _facingRightInitially;
 			if (_spriteRenderer != null) {	_spriteRenderer.flipX = _initialFlipX;	}
-			transform.localScale = _initialLocalScale;	
+			transform.localScale = _initialLocalScale;
 			_shouldMove = true;
             _damageOnTouch?.InitializeFeedbacks();
 
@@ -183,13 +183,13 @@ namespace MoreMountains.TopDownEngine
 			if (_spriteRenderer != null)
 			{
 				_spriteRenderer.flipX = !_spriteRenderer.flipX;
-			}	
+			}
 			else
 			{
 				this.transform.localScale = Vector3.Scale(this.transform.localScale,FlipValue) ;
 			}
 		}
-        
+
         /// <summary>
         /// Flip the projectile
         /// </summary>
@@ -246,7 +246,7 @@ namespace MoreMountains.TopDownEngine
             {
                 _collider2D.enabled = false;
             }
-			
+
 			_shouldMove = false;
 		}
 
@@ -286,7 +286,7 @@ namespace MoreMountains.TopDownEngine
 			if (_health != null)
 			{
 				_health.OnDeath -= OnDeath;
-			}			
+			}
 		}
-	}	
+	}
 }

@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using MoreMountains.Tools;
 using MoreMountains.Feedbacks;
+using Sirenix.OdinInspector;
 
 namespace MoreMountains.TopDownEngine
 {
@@ -9,7 +10,7 @@ namespace MoreMountains.TopDownEngine
 	/// This class manages the health of an object, pilots its potential health bar, handles what happens when it takes damage,
 	/// and what happens when it dies.
 	/// </summary>
-	[AddComponentMenu("TopDown Engine/Character/Core/Health")] 
+	[AddComponentMenu("TopDown Engine/Character/Core/Health")]
 	public class Health : MonoBehaviour
 	{
         [Header("Bindings")]
@@ -21,47 +22,50 @@ namespace MoreMountains.TopDownEngine
         [Header("Status")]
 
         [MMReadOnly]
-		[Tooltip("当前血量")]
+		[LabelText("当前血量")]
 		public int CurrentHealth ;
-        
+
 		[MMReadOnly]
-		[Tooltip("是否无敌，无敌不受到伤害")]
-		public bool Invulnerable = false;	
+		[LabelText("是否无敌，无敌不受到伤害")]
+		public bool Invulnerable = false;
 
 		[Header("Health")]
 
-		[MMInformation("Add this component to an object and it'll have health, will be able to get damaged and potentially die.",MoreMountains.Tools.MMInformationAttribute.InformationType.Info,false)]
 		// 初始血量
-		[Tooltip("初始血量")]
+		[LabelText("初始血量")]
 		public int InitialHealth = 10;
-		
+
 		// 最大血量
-		[Tooltip("最大血量")]
+		[LabelText("最大血量")]
 		public int MaximumHealth = 10;
 
         [Header("Damage")]
 
         [MMInformation("Here you can specify an effect and a sound FX to instantiate when the object gets damaged, and also how long the object should flicker when hit (only works for sprites).", MoreMountains.Tools.MMInformationAttribute.InformationType.Info, false)]
-		// whether or not this object is immune to damage knockback
-		[Tooltip("whether or not this object is immune to damage knockback")]
+		// 是否免疫击退
+		[LabelText("是否免疫击退")]
 		public bool ImmuneToKnockback = false;
-		/// the feedback to play when getting damage
-		[Tooltip("the feedback to play when getting damage")]
+
+		/// 受到伤害时的MMFeedBack
+		[LabelText("受到伤害时的MMFeedBack")]
 		public MMFeedbacks DamageMMFeedbacks;
 
         [Header("Death")]
 
-        [MMInformation("Here you can set an effect to instantiate when the object dies, a force to apply to it (topdown controller required), how many points to add to the game score, if the device should vibrate (only works on iOS and Android), and where the character should respawn (for non-player characters only).", MoreMountains.Tools.MMInformationAttribute.InformationType.Info, false)]
-        /// whether or not this object should get destroyed on death
-        [Tooltip("whether or not this object should get destroyed on death")]
+        [MMInformation("在这里，您可以设置一个效果，在对象死亡时实例化，应用于对象的力（需要自上而下的控制器），向游戏分数添加多少点，设备是否应振动（仅适用于iOS和Android），以及角色应在何处重生（仅适用于非玩家角色）。", MoreMountains.Tools.MMInformationAttribute.InformationType.Info, false)]
+        // 是否在死亡时destroy
+        [LabelText("是否在死亡时destroy")]
 		public bool DestroyOnDeath = true;
-        /// the time (in seconds) before the character is destroyed or disabled
-        [Tooltip("the time (in seconds) before the character is destroyed or disabled")]
+
+        // 销毁前的延迟
+        [LabelText("销毁前的延迟")]
 		public float DelayBeforeDestruction = 0f;
-		/// the points the player gets when the object's health reaches zero
-		[Tooltip("the points the player gets when the object's health reaches zero")]
+
+		/// 死亡时增加的分数
+		[LabelText("死亡时增加的分数")]
 		public int PointsWhenDestroyed;
 		/// if this is set to false, the character will respawn at the location of its death, otherwise it'll be moved to its initial position (when the scene started)
+		[LabelText("是否在重生时重置位置")]
 		[Tooltip("if this is set to false, the character will respawn at the location of its death, otherwise it'll be moved to its initial position (when the scene started)")]
 		public bool RespawnAtInitialLocation = false;
 		/// if this is true, the controller will be disabled on death
@@ -86,7 +90,7 @@ namespace MoreMountains.TopDownEngine
         [Tooltip("the layer we should move this character to on death")]
         public MMLayer LayerOnDeath;
         /// the feedback to play when dying
-        [Tooltip("the feedback to play when dying")]
+        [LabelText("死亡时的MMFeedbacks")]
 		public MMFeedbacks DeathMMFeedbacks;
 
         // hit delegate
@@ -114,7 +118,7 @@ namespace MoreMountains.TopDownEngine
         protected AutoRespawn _autoRespawn;
         protected Animator _animator;
         protected int _initialLayer;
-        
+
         /// <summary>
         /// On Start, we initialize our health
         /// </summary>
@@ -128,16 +132,16 @@ namespace MoreMountains.TopDownEngine
 	    /// </summary>
 		protected virtual void Initialization()
 		{
-			_character = this.gameObject.GetComponent<Character>(); 
+			_character = this.gameObject.GetComponent<Character>();
 
             if (Model != null)
             {
                 Model.SetActive(true);
-            }        
-            
+            }
+
             if (gameObject.MMGetComponentNoAlloc<Renderer>() != null)
 			{
-				_renderer = GetComponent<Renderer>();				
+				_renderer = GetComponent<Renderer>();
 			}
 			if (_character != null)
 			{
@@ -145,17 +149,17 @@ namespace MoreMountains.TopDownEngine
 				{
 					if (_character.CharacterModel.GetComponentInChildren<Renderer> ()!= null)
 					{
-						_renderer = _character.CharacterModel.GetComponentInChildren<Renderer> ();	
+						_renderer = _character.CharacterModel.GetComponentInChildren<Renderer> ();
 					}
-				}	
+				}
 			}
             if (_renderer != null)
             {
                 if (_renderer.material.HasProperty("_Color"))
                 {
                     _initialColor = _renderer.material.color;
-                }                    
-            }            
+                }
+            }
 
             // we grab our animator
             if (_character != null)
@@ -207,7 +211,7 @@ namespace MoreMountains.TopDownEngine
             if (Model != null)
             {
                 Model.SetActive(true);
-            }            
+            }
 			DamageEnabled();
 			UpdateHealthBar (false);
 	    }
@@ -251,9 +255,9 @@ namespace MoreMountains.TopDownEngine
             if (invincibilityDuration > 0)
 			{
 				DamageDisabled();
-				StartCoroutine(DamageEnabled(invincibilityDuration));	
+				StartCoroutine(DamageEnabled(invincibilityDuration));
 			}
-            
+
 			// we trigger a damage taken event
 			MMDamageTakenEvent.Trigger(_character, instigator, CurrentHealth, damage, previousHealth);
 
@@ -263,7 +267,7 @@ namespace MoreMountains.TopDownEngine
             }
 
             DamageMMFeedbacks?.PlayFeedbacks(this.transform.position);
-            
+
 			// we update the health bar
 			UpdateHealthBar(true);
 
@@ -299,7 +303,7 @@ namespace MoreMountains.TopDownEngine
             DamageDisabled();
 
             DeathMMFeedbacks?.PlayFeedbacks(this.transform.position);
-            
+
 			// Adds points if needed.
 			if(PointsWhenDestroyed != 0)
 			{
@@ -325,8 +329,8 @@ namespace MoreMountains.TopDownEngine
 
                 // if we have a controller, removes collisions, restores parameters for a potential respawn, and applies a death force
                 if (_controller != null)
-			    {				
-					_controller.CollisionsOff();						
+			    {
+					_controller.CollisionsOff();
                 }
 
                 if (DisableChildCollisionsOnDeath)
@@ -350,7 +354,7 @@ namespace MoreMountains.TopDownEngine
                     this.transform.ChangeLayersRecursively(LayerOnDeath.LayerIndex);
                 }
             }
-            
+
             OnDeath?.Invoke();
 
             if (DisableControllerOnDeath && (_controller != null))
@@ -375,7 +379,7 @@ namespace MoreMountains.TopDownEngine
 			else
 			{
 				// finally we destroy the object
-				DestroyObject();	
+				DestroyObject();
 			}
 		}
 
@@ -433,7 +437,7 @@ namespace MoreMountains.TopDownEngine
             if (_renderer!= null)
             {
                 _renderer.material.color = _initialColor;
-            }            
+            }
 
             if (RespawnAtInitialLocation)
 			{
@@ -459,7 +463,7 @@ namespace MoreMountains.TopDownEngine
                 if (DestroyOnDeath)
                 {
                     gameObject.SetActive(false);
-                }                
+                }
             }
             else
             {
@@ -486,7 +490,7 @@ namespace MoreMountains.TopDownEngine
 	    {
 			CurrentHealth = MaximumHealth;
 			UpdateHealthBar (false);
-        }	
+        }
 
         /// <summary>
         /// 设置当前血量，并且更新血条

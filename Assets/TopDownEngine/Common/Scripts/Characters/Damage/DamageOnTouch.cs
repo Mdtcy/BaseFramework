@@ -8,7 +8,7 @@ using MoreMountains.Feedbacks;
 namespace MoreMountains.TopDownEngine
 {
     /// <summary>
-    /// Add this component to an object and it will cause damage to objects that collide with it. 
+    /// Add this component to an object and it will cause damage to objects that collide with it.
     /// </summary>
     [AddComponentMenu("TopDown Engine/Character/Damage/DamageOnTouch")]
     public class DamageOnTouch : MonoBehaviour
@@ -36,7 +36,7 @@ namespace MoreMountains.TopDownEngine
         /// the type of knockback to apply when causing damage
         [Tooltip("the type of knockback to apply when causing damage")]
         public KnockbackStyles DamageCausedKnockbackType = KnockbackStyles.AddForce;
-        /// The direction to apply the knockback 
+        /// The direction to apply the knockback
         [Tooltip("The direction to apply the knockback ")]
         public KnockbackDirections DamageCausedKnockbackDirection;
         /// The force to apply to the object that gets damaged
@@ -61,7 +61,7 @@ namespace MoreMountains.TopDownEngine
         /// the type of knockback to apply when taking damage
         [Tooltip("the type of knockback to apply when taking damage")]
         public KnockbackStyles DamageTakenKnockbackType = KnockbackStyles.NoKnockback;
-        /// The direction to apply the knockback 
+        /// The direction to apply the knockback
         [Tooltip("The direction to apply the knockback ")]
         public KnockbackDirections DamagedTakenKnockbackDirection;
         /// The force to apply to the object that gets damaged
@@ -84,7 +84,7 @@ namespace MoreMountains.TopDownEngine
         [Tooltip("the owner of the DamageOnTouch zone")]
         public GameObject Owner;
 
-        // storage		
+        // storage
         protected Vector3 _lastPosition, _velocity, _knockbackForce;
         protected float _startTime = 0f;
         protected Health _colliderHealth;
@@ -116,7 +116,7 @@ namespace MoreMountains.TopDownEngine
             _boxCollider = GetComponent<BoxCollider>();
             _sphereCollider = GetComponent<SphereCollider>();
             _circleCollider2D = GetComponent<CircleCollider2D>();
-            
+
             _gizmosColor = Color.red;
             _gizmosColor.a = 0.25f;
             if (_boxCollider2D != null) { SetGizmoOffset(_boxCollider2D.offset); }
@@ -197,7 +197,7 @@ namespace MoreMountains.TopDownEngine
             if (Time.deltaTime != 0f)
             {
                 _velocity = (_lastPosition - (Vector3)transform.position) / Time.deltaTime;
-            }            
+            }
             _lastPosition = transform.position;
         }
 
@@ -287,11 +287,12 @@ namespace MoreMountains.TopDownEngine
         }
 
         /// <summary>
-        /// Describes what happens when colliding with a damageable object
+        /// 碰撞到可以伤害的物体
         /// </summary>
         /// <param name="health">Health.</param>
         protected virtual void OnCollideWithDamageable(Health health)
         {
+            // 如果碰撞到的是TopDownController，应用一个力
             // if what we're colliding with is a TopDownController, we apply a knockback force
             _colliderTopDownController = health.gameObject.MMGetComponentNoAlloc<TopDownController>();
             _colliderRigidBody = health.gameObject.MMGetComponentNoAlloc<Rigidbody>();
@@ -321,8 +322,10 @@ namespace MoreMountains.TopDownEngine
 
             HitDamageableFeedback?.PlayFeedbacks(this.transform.position);
 
-            // we apply the damage to the thing we've collided with
+            // 对碰撞到的物体造成伤害 todo
             _colliderHealth.Damage(DamageCaused, gameObject, InvincibilityDuration, InvincibilityDuration);
+
+            // 对自己造成伤害
             if (DamageTakenEveryTime + DamageTakenDamageable > 0)
             {
                 SelfDamage(DamageTakenEveryTime + DamageTakenDamageable);
@@ -330,7 +333,7 @@ namespace MoreMountains.TopDownEngine
         }
 
         /// <summary>
-        /// Describes what happens when colliding with a non damageable object
+        /// 碰撞到不可以伤害的物体
         /// </summary>
         protected virtual void OnCollideWithNonDamageable()
         {
@@ -343,7 +346,7 @@ namespace MoreMountains.TopDownEngine
         }
 
         /// <summary>
-        /// Applies damage to itself
+        /// 对自己造成伤害
         /// </summary>
         /// <param name="damage">Damage.</param>
         protected virtual void SelfDamage(int damage)
@@ -382,7 +385,7 @@ namespace MoreMountains.TopDownEngine
             {
                 if (_boxCollider2D.enabled)
                 {
-                    MMDebug.DrawGizmoCube(this.transform, 
+                    MMDebug.DrawGizmoCube(this.transform,
                                             _gizmoOffset,
                                             _boxCollider2D.size,
                                             false);
@@ -393,7 +396,7 @@ namespace MoreMountains.TopDownEngine
                                             _gizmoOffset,
                                             _boxCollider2D.size,
                                             true);
-                }                
+                }
             }
 
             if (_circleCollider2D != null)
@@ -407,8 +410,8 @@ namespace MoreMountains.TopDownEngine
                     Gizmos.DrawWireSphere((Vector2)this.transform.position + _circleCollider2D.offset, _circleCollider2D.radius);
                 }
             }
-            
-            if (_boxCollider != null) 
+
+            if (_boxCollider != null)
             {
                 if (_boxCollider.enabled)
                 {
@@ -425,7 +428,7 @@ namespace MoreMountains.TopDownEngine
                                             true);
                 }
             }
-            
+
             if (_sphereCollider != null)
             {
                 if (_sphereCollider.enabled)
@@ -435,7 +438,7 @@ namespace MoreMountains.TopDownEngine
                 else
                 {
                     Gizmos.DrawWireSphere(this.transform.position, _sphereCollider.radius);
-                }                
+                }
             }
         }
 
