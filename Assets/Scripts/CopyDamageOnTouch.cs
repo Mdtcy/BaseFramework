@@ -1,17 +1,14 @@
 using UnityEngine;
-using System.Collections;
 using MoreMountains.Tools;
 using System.Collections.Generic;
-using System;
 using MoreMountains.Feedbacks;
+using MoreMountains.TopDownEngine;
 
-namespace MoreMountains.TopDownEngine
-{
-    /// <summary>
+/// <summary>
     /// Add this component to an object and it will cause damage to objects that collide with it.
     /// </summary>
-    [AddComponentMenu("TopDown Engine/Character/Damage/DamageOnTouch")]
-    public class DamageOnTouch : MonoBehaviour
+    [AddComponentMenu("TopDown Engine/Character/Damage/CopyDamageOnTouch")]
+    public class CopyDamageOnTouch : MonoBehaviour
     {
         /// the possible ways to add knockback : noKnockback, which won't do nothing, set force, or add force
         public enum KnockbackStyles { NoKnockback, AddForce }
@@ -332,7 +329,7 @@ namespace MoreMountains.TopDownEngine
             }
 
             // todo
-
+            HitEvent.Trigger(this.transform.position);
         }
 
         /// <summary>
@@ -346,6 +343,7 @@ namespace MoreMountains.TopDownEngine
             }
 
             HitNonDamageableFeedback?.PlayFeedbacks(this.transform.position);
+            HitEvent.Trigger(this.transform.position);
         }
 
         /// <summary>
@@ -446,4 +444,3 @@ namespace MoreMountains.TopDownEngine
         }
 
     }
-}

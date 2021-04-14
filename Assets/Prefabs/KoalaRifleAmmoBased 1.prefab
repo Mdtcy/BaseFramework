@@ -5146,7 +5146,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MutualizeWaitingPools: 1
   NestWaitingPool: 1
-  GameObjectToPool: {fileID: 1486318089921324, guid: 5dc6333a08c896a45a18c1ac8a610943,
+  GameObjectToPool: {fileID: 1486318089921324, guid: a590936afe60dfe40bb00f8fd1de08c2,
     type: 3}
   PoolSize: 20
   PoolCanExpand: 1
